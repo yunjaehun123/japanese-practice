@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>일본어 학습 사이트</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+
+        .level-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .level-btn {
+            background: white;
+            border: 3px solid #3498db;
+            padding: 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .level-btn:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .level-btn.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .quiz-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .quiz-section.active {
+            display: block;
+        }
+
+        .quiz-card {
+            text-align: center;
+            padding: 40px;
+            background: #ecf0f1;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .japanese-text {
+            font-size: 3em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-family: 'Yu Gothic', 'Hiragino Sans', sans-serif;
+        }
+
+        .input-section {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            font-size: 1.2em;
+            padding: 12px 20px;
+            border: 2px solid #bdc3c7;
+            border-radius: 6px;
+            width: 300px;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .correct {
+            background: #d5f4e6;
+            color: #27ae60;
+            border: 2px solid #27ae60;
+        }
+
+        .incorrect {
+            background: #fadbd8;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            background: #34495e;
+            color: white;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #3498db;
+            transition: width 0.3s ease;
+        }
+
+        .chart-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .chart-table th, .chart-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            background: white;
+        }
+
+        .chart-table th {
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+
+        .chart-table .japanese-char {
+            font-size: 1.5em;
+            font-weight: bold;
+            font-family: 'Yu Gothic', 'Hiragino Sans', sans-serif;
+        }
+
+        .chart-table .korean-char {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+
+        .chart-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .chart-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .chart-title {
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-table {
+                font-size: 0.9em;
+            }
+            
+            .chart-table th, .chart-table td {
+                padding: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🇯🇵 일본어 학습 사이트</h1>
+            <p class="subtitle">단계별로 일본어를 마스터해보세요!</p>
+        </header>
+
+        <div class="level-buttons">
+            <div class="level-btn" onclick="selectLevel('chart')">
+                <div>📊 문자표</div>
+                <small>히라가나/가타카나</small>
+            </div>
+            <div class="level-btn" onclick="selectLevel('hiragana')">
+                <div>📝 히라가나</div>
+                <small>기본 문자</small>
+            </div>
+            <div class="level-btn" onclick="selectLevel('katakana')">
+                <div>🔤 가타카나</div>
+                <small>외래어 문자</small>
+            </div>
+            <div class="level-btn" onclick="selectLevel('vocabulary')">
+                <div>📚 단어</div>
+                <small>일상 단어</small>
+            </div>
+            <div class="level-btn" onclick="selectLevel('sentences')">
+                <div>💬 문장</div>
+                <small>기본 문장</small>
+            </div>
+        </div>
+
+        <div id="chart" class="quiz-section">
+            <div class="level-description">히라가나와 가타카나 문자표를 참고하여 학습하세요</div>
+            
+            <div class="chart-container">
+                <div class="chart-section">
+                    <div class="chart-title">🔤 히라가나 (ひらがな)</div>
+                    <table class="chart-table">
+                        <tr>
+                            <th></th><th>あ단</th><th>い단</th><th>う단</th><th>え단</th><th>お단</th>
+                        </tr>
+                        <tr>
+                            <th>あ행</th>
+                            <td><div class="japanese-char">あ</div><div class="korean-char">아</div></td>
+                            <td><div class="japanese-char">い</div><div class="korean-char">이</div></td>
+                            <td><div class="japanese-char">う</div><div class="korean-char">우</div></td>
+                            <td><div class="japanese-char">え</div><div class="korean-char">에</div></td>
+                            <td><div class="japanese-char">お</div><div class="korean-char">오</div></td>
+                        </tr>
+                        <tr>
+                            <th>か행</th>
+                            <td><div class="japanese-char">か</div><div class="korean-char">카</div></td>
+                            <td><div class="japanese-char">き</div><div class="korean-char">키</div></td>
+                            <td><div class="japanese-char">く</div><div class="korean-char">쿠</div></td>
+                            <td><div class="japanese-char">け</div><div class="korean-char">케</div></td>
+                            <td><div class="japanese-char">こ</div><div class="korean-char">코</div></td>
+                        </tr>
+                        <tr>
+                            <th>さ행</th>
+                            <td><div class="japanese-char">さ</div><div class="korean-char">사</div></td>
+                            <td><div class="japanese-char">し</div><div class="korean-char">시</div></td>
+                            <td><div class="japanese-char">す</div><div class="korean-char">스</div></td>
+                            <td><div class="japanese-char">せ</div><div class="korean-char">세</div></td>
+                            <td><div class="japanese-char">そ</div><div class="korean-char">소</div></td>
+                        </tr>
+                        <tr>
+                            <th>た행</th>
+                            <td><div class="japanese-char">た</div><div class="korean-char">타</div></td>
+                            <td><div class="japanese-char">ち</div><div class="korean-char">치</div></td>
+                            <td><div class="japanese-char">つ</div><div class="korean-char">츠</div></td>
+                            <td><div class="japanese-char">て</div><div class="korean-char">테</div></td>
+                            <td><div class="japanese-char">と</div><div class="korean-char">토</div></td>
+                        </tr>
+                        <tr>
+                            <th>な행</th>
+                            <td><div class="japanese-char">な</div><div class="korean-char">나</div></td>
+                            <td><div class="japanese-char">に</div><div class="korean-char">니</div></td>
+                            <td><div class="japanese-char">ぬ</div><div class="korean-char">누</div></td>
+                            <td><div class="japanese-char">ね</div><div class="korean-char">네</div></td>
+                            <td><div class="japanese-char">の</div><div class="korean-char">노</div></td>
+                        </tr>
+                        <tr>
+                            <th>は행</th>
+                            <td><div class="japanese-char">は</div><div class="korean-char">하</div></td>
+                            <td><div class="japanese-char">ひ</div><div class="korean-char">히</div></td>
+                            <td><div class="japanese-char">ふ</div><div class="korean-char">후</div></td>
+                            <td><div class="japanese-char">へ</div><div class="korean-char">헤</div></td>
+                            <td><div class="japanese-char">ほ</div><div class="korean-char">호</div></td>
+                        </tr>
+                        <tr>
+                            <th>ま행</th>
+                            <td><div class="japanese-char">ま</div><div class="korean-char">마</div></td>
+                            <td><div class="japanese-char">み</div><div class="korean-char">미</div></td>
+                            <td><div class="japanese-char">む</div><div class="korean-char">무</div></td>
+                            <td><div class="japanese-char">め</div><div class="korean-char">메</div></td>
+                            <td><div class="japanese-char">も</div><div class="korean-char">모</div></td>
+                        </tr>
+                        <tr>
+                            <th>や행</th>
+                            <td><div class="japanese-char">や</div><div class="korean-char">야</div></td>
+                            <td style="background: #f5f5f5;"></td>
+                            <td><div class="japanese-char">ゆ</div><div class="korean-char">유</div></td>
+                            <td style="background: #f5f5f5;"></td>
+                            <td><div class="japanese-char">よ</div><div class="korean-char">요</div></td>
+                        </tr>
+                        <tr>
+                            <th>ら행</th>
+                            <td><div class="japanese-char">ら</div><div class="korean-char">라</div></td>
+                            <td><div class="japanese-char">り</div><div class="korean-char">리</div></td>
+                            <td><div class="japanese-char">る</div><div class="korean-char">루</div></td>
+                            <td><div class="japanese-char">れ</div><div class="korean-char">레</div></td>
+                            <td><div class="japanese-char">ろ</div><div class="korean-char">로</div></td>
+                        </tr>
+                        <tr>
+                            <th>わ행</th>
+                            <td><div class="japanese-char">わ</div><div class="korean-char">와</div></td>
+                            <td style="background: #f5f5f5;"></td>
+                            <td style="background: #f5f5f5;"></td>
+                            <td style="background: #f5f5f5;"></td>
+                            <td><div class="japanese-char">を</div><div class="korean-char">오</div></td>
+                        </tr>
+                        <tr>
+                            <th>ん</th>
+                            <td colspan="5"><div class="japanese-char">ん</div><div class="korean-char">ㄴ</div></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="chart-section">
+                    <div class="chart-title">🔤 가타카나 (カタカナ)</div>
+                    <table class="chart-table">
+                        <tr>
+                            <th></th><th>ア단</th><th>イ단</th><th>ウ단</th><th>エ단</th><th>オ단</th>
+                        </tr>
+                        <tr>
+                            <th>ア행</th>
+                            <td><div class="japanese-char">ア</div><div class="korean-char">아</div></td>
+                            <td><div class="japanese-char">イ</div><div class="korean-char">이</div></td>
+                            <td><div class="japanese-char">ウ</div><div class="korean-char">우</div></td>
+                            <td><div class="japanese-char">エ</div><div class="korean-char">에</div></td>
+                            <td><div class="japanese-char">オ</div><div class="korean-char">오</div></td>
+                        </tr>
+                        <tr>
+                            <th>カ행</th>
+                            <td><div class="japanese-char">カ</div><div class="korean-char">카</div></td>
+                            <td><div class="japanese-char">キ</div><div class="korean-char">키</div></td>
+                            <td><div class="japanese-char">ク</div><div class="korean-char">쿠</div></td>
+                            <td><div class="japanese-char">ケ</div><div class="korean-char">케</div></td>
+                            <td><div class="japanese-char">コ</div><div class="korean-char">코</div></td>
+                        </tr>
+                        <tr>
+                            <th>サ행</th>
+                            <td><div class="japanese-char">サ</div><div class="korean-char">사</div></td>
+                            <td><div class="japanese-char">シ</div><div class="korean-char">시</div></td>
+                            <td><div class="japanese-char">ス</div><div class="korean-char">스</div></td>
+                            <td><div class="japanese-char">セ</div><div class="korean-char">세</div></td>
+                            <td><div class="japanese-char">ソ</div><div class="korean-char">소</div></td>
+                        </tr>
+                        <tr>
+                            <th>タ행</th>
+                            <td><div class="japanese-char">タ</div><div class="korean-char">타</div></td>
+                            <td><div class="japanese-char">チ</div><div class="korean-char">치</div></td>
+                            <td><div class="japanese-char">ツ</div><div class="korean-char">츠</div></td>
+                            <td><div class="japanese-char">テ</div><div class="korean-char">테</div></td>
+                            <td><div class="japanese-char">ト</div><div class="korean-char">토</div></td>
+                        </tr>
+                        <tr>
+                            <th>ナ행</th>
+                            <td><div class="japanese-char">ナ</div><div class="korean-char">나</div></td>
+                            <td><div class="japanese-char">ニ</div><div class="korean-char">니</div></td>
+                            <td><div class="japanese-char">ヌ</div><div class="korean-char">누</div></td>
+                            <td><div class="japanese-char">ネ</div><div class="korean-char">네</div></td>
+                            <td><div class="japanese-char">ノ</div><div class="korean-char">노</div></td>
+                        </tr>
+                        <tr>
+                            <th>ハ행</th>
+                            <td><div class="japanese-char">ハ</div><div class="korean-char">하</div></td>
+                            <td><div class="japanese-char">ヒ</div><div class="korean-char">히</div></td>
+                            <td><div class="japanese-char">フ</div><div class="korean-char">후</div></td>
+                            <td><div class="japanese-char">ヘ</div><div class="korean-char">헤</div></td>
+                            <td><div class="japanese-char">ホ</div><div class="korean-char">호</div></td>
+                        </tr>
+                        <tr>
+                            <th>マ행</th>
+                            <td><div class="japanese-char">マ</div><div class="korean-char">마</div></td>
+                            <td><div class="japanese-char">ミ</div><div class="korean-char">미</div></td>
+                            <td><div class="japanese-char">ム</div><div class="korean-char">무</div></td>
+                            <td><div class="japanese-char">メ</div><div class="korean-char">메</div></td>
+                            <td><div class="japanese-char">モ</div><div class="korean-char">모</div></td>
+                        </tr>
+                        <tr>
+                            <th>ヤ행</th>
+                            <td><div class="japanese-char">ヤ</div><div class="korean-char">야</div></td>
+                            <td style="background: #f5f5f5;"></td>
+                            <td><div class="japanese-char">ユ</div><div class="korean-char">유</div></td>
+                            <td style="background: #f5f5f5;"></td>
+                            <td><div class="japanese-char">ヨ</div><div class="korean-char">요</div></td>
+                        </tr>
+                        <tr>
+                            <th>ラ행</th>
+                            <td><div class="japanese-char">ラ</div><div class="korean-char">라</div></td>
+                            <td><div class="japanese-char">リ</div><div class="korean-char">리</div></td>
+                            <td><div class="japanese-char">ル</div><div class="korean-char">루</div></td>
+                            <td><div class="japanese-char">レ</div><div class="korean-char">레</div></td>
+                            <td><div class="japanese-char">ロ</div><div class="korean-char">로</div></td>
+                        </tr>
+                        <tr>
+                            <th>ワ행</th>
+                            <td><div class="japanese-char">ワ</div><div class="korean-char">와</div></td>
+                            <td style="background: #f5f5f5;"></td>
+                            <td style="background: #f5f5f5;"></td>
+                            <td style="background: #f5f5f5;"></td>
+                            <td><div class="japanese-char">ヲ</div><div class="korean-char">오</div></td>
+                        </tr>
+                        <tr>
+                            <th>ン</th>
+                            <td colspan="5"><div class="japanese-char">ン</div><div class="korean-char">ㄴ</div></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="hiragana" class="quiz-section">
+            <div class="level-description">히라가나를 보고 한국어 발음을 입력하세요</div>
+            <div class="score">점수: <span id="hiragana-score">0</span>/10</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="hiragana-progress"></div>
+            </div>
+            <div class="quiz-card">
+                <div class="japanese-text" id="hiragana-text"></div>
+                <div class="input-section">
+                    <input type="text" id="hiragana-input" placeholder="한국어 발음을 입력하세요">
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="checkAnswer('hiragana')">정답 확인</button>
+                    <button class="btn btn-secondary" onclick="skipQuestion('hiragana')">건너뛰기</button>
+                    <button class="btn btn-success" onclick="nextQuestion('hiragana')">다음 문제</button>
+                </div>
+                <div id="hiragana-result" class="result" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div id="katakana" class="quiz-section">
+            <div class="level-description">가타카나를 보고 한국어 발음을 입력하세요</div>
+            <div class="score">점수: <span id="katakana-score">0</span>/10</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="katakana-progress"></div>
+            </div>
+            <div class="quiz-card">
+                <div class="japanese-text" id="katakana-text"></div>
+                <div class="input-section">
+                    <input type="text" id="katakana-input" placeholder="한국어 발음을 입력하세요">
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="checkAnswer('katakana')">정답 확인</button>
+                    <button class="btn btn-secondary" onclick="skipQuestion('katakana')">건너뛰기</button>
+                    <button class="btn btn-success" onclick="nextQuestion('katakana')">다음 문제</button>
+                </div>
+                <div id="katakana-result" class="result" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div id="vocabulary" class="quiz-section">
+            <div class="level-description">일본어 단어를 보고 한국어 뜻을 입력하세요</div>
+            <div class="score">점수: <span id="vocabulary-score">0</span>/10</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="vocabulary-progress"></div>
+            </div>
+            <div class="quiz-card">
+                <div class="japanese-text" id="vocabulary-text"></div>
+                <div class="input-section">
+                    <input type="text" id="vocabulary-input" placeholder="한국어 뜻을 입력하세요">
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="checkAnswer('vocabulary')">정답 확인</button>
+                    <button class="btn btn-secondary" onclick="skipQuestion('vocabulary')">건너뛰기</button>
+                    <button class="btn btn-success" onclick="nextQuestion('vocabulary')">다음 문제</button>
+                </div>
+                <div id="vocabulary-result" class="result" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div id="sentences" class="quiz-section">
+            <div class="level-description">일본어 문장을 보고 한국어로 번역하세요</div>
+            <div class="score">점수: <span id="sentences-score">0</span>/10</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="sentences-progress"></div>
+            </div>
+            <div class="quiz-card">
+                <div class="japanese-text" id="sentences-text"></div>
+                <div class="input-section">
+                    <input type="text" id="sentences-input" placeholder="한국어 번역을 입력하세요" style="width: 400px;">
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="checkAnswer('sentences')">정답 확인</button>
+                    <button class="btn btn-secondary" onclick="skipQuestion('sentences')">건너뛰기</button>
+                    <button class="btn btn-success" onclick="nextQuestion('sentences')">다음 문제</button>
+                </div>
+                <div id="sentences-result" class="result" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const data = {
+            hiragana: [
+                {japanese: 'あ', korean: '아'}, {japanese: 'い', korean: '이'}, {japanese: 'う', korean: '우'},
+                {japanese: 'え', korean: '에'}, {japanese: 'お', korean: '오'}, {japanese: 'か', korean: '카'},
+                {japanese: 'き', korean: '키'}, {japanese: 'く', korean: '쿠'}, {japanese: 'け', korean: '케'},
+                {japanese: 'こ', korean: '코'}, {japanese: 'さ', korean: '사'}, {japanese: 'し', korean: '시'},
+                {japanese: 'す', korean: '스'}, {japanese: 'せ', korean: '세'}, {japanese: 'そ', korean: '소'},
+                {japanese: 'た', korean: '타'}, {japanese: 'ち', korean: '치'}, {japanese: 'つ', korean: '츠'},
+                {japanese: 'て', korean: '테'}, {japanese: 'と', korean: '토'}, {japanese: 'な', korean: '나'},
+                {japanese: 'に', korean: '니'}, {japanese: 'ぬ', korean: '누'}, {japanese: 'ね', korean: '네'},
+                {japanese: 'の', korean: '노'}, {japanese: 'は', korean: '하'}, {japanese: 'ひ', korean: '히'},
+                {japanese: 'ふ', korean: '후'}, {japanese: 'へ', korean: '헤'}, {japanese: 'ほ', korean: '호'}
+            ],
+            katakana: [
+                {japanese: 'ア', korean: '아'}, {japanese: 'イ', korean: '이'}, {japanese: 'ウ', korean: '우'},
+                {japanese: 'エ', korean: '에'}, {japanese: 'オ', korean: '오'}, {japanese: 'カ', korean: '카'},
+                {japanese: 'キ', korean: '키'}, {japanese: 'ク', korean: '쿠'}, {japanese: 'ケ', korean: '케'},
+                {japanese: 'コ', korean: '코'}, {japanese: 'サ', korean: '사'}, {japanese: 'シ', korean: '시'},
+                {japanese: 'ス', korean: '스'}, {japanese: 'セ', korean: '세'}, {japanese: 'ソ', korean: '소'},
+                {japanese: 'タ', korean: '타'}, {japanese: 'チ', korean: '치'}, {japanese: 'ツ', korean: '츠'},
+                {japanese: 'テ', korean: '테'}, {japanese: 'ト', korean: '토'}, {japanese: 'ナ', korean: '나'},
+                {japanese: 'ニ', korean: '니'}, {japanese: 'ヌ', korean: '누'}, {japanese: 'ネ', korean: '네'},
+                {japanese: 'ノ', korean: '노'}, {japanese: 'ハ', korean: '하'}, {japanese: 'ヒ', korean: '히'},
+                {japanese: 'フ', korean: '후'}, {japanese: 'ヘ', korean: '헤'}, {japanese: 'ホ', korean: '호'}
+            ],
+            vocabulary: [
+                {japanese: 'こんにちは', korean: '안녕하세요'}, {japanese: 'ありがとう', korean: '고마워요'},
+                {japanese: 'すみません', korean: '죄송합니다'}, {japanese: 'はじめまして', korean: '처음 뵙겠습니다'},
+                {japanese: 'おはよう', korean: '안녕하세요'}, {japanese: 'こんばんは', korean: '안녕하세요'},
+                {japanese: 'さようなら', korean: '안녕히 가세요'}, {japanese: 'はい', korean: '네'},
+                {japanese: 'いいえ', korean: '아니오'}, {japanese: 'わかりません', korean: '모르겠습니다'},
+                {japanese: 'おなまえ', korean: '이름'}, {japanese: 'がくせい', korean: '학생'},
+                {japanese: 'せんせい', korean: '선생님'}, {japanese: 'ともだち', korean: '친구'},
+                {japanese: 'かぞく', korean: '가족'}, {japanese: 'おかあさん', korean: '어머니'},
+                {japanese: 'おとうさん', korean: '아버지'}, {japanese: 'みず', korean: '물'},
+                {japanese: 'たべもの', korean: '음식'}, {japanese: 'ほん', korean: '책'}
+            ],
+            sentences: [
+                {japanese: 'わたしは がくせいです。', korean: '저는 학생입니다.'},
+                {japanese: 'これは ほんです。', korean: '이것은 책입니다.'},
+                {japanese: 'あれは なんですか。', korean: '저것은 무엇입니까?'},
+                {japanese: 'いま なんじですか。', korean: '지금 몇 시입니까?'},
+                {japanese: 'きょうは いい てんきですね。', korean: '오늘은 좋은 날씨네요.'},
+                {japanese: 'にほんごを べんきょうします。', korean: '일본어를 공부합니다.'},
+                {japanese: 'まいにち がっこうに いきます。', korean: '매일 학교에 갑니다.'},
+                {japanese: 'ばんごはんを たべました。', korean: '저녁을 먹었습니다.'},
+                {japanese: 'あした やすみです。', korean: '내일은 휴일입니다.'},
+                {japanese: 'にほんに いったことが あります。', korean: '일본에 간 적이 있습니다.'}
+            ]
+        };
+
+        let currentLevel = '';
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let shuffledQuestions = [];
+        let answered = false;
+
+        function selectLevel(level) {
+            // 모든 버튼과 섹션 초기화
+            document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.quiz-section').forEach(section => section.classList.remove('active'));
+            
+            // 선택된 레벨 활성화
+            event.target.closest('.level-btn').classList.add('active');
+            document.getElementById(level).classList.add('active');
+            
+            currentLevel = level;
+            currentQuestionIndex = 0;
+            score = 0;
+            answered = false;
+            
+            // 문제 순서 섞기
+            shuffledQuestions = [...data[level]].sort(() => Math.random() - 0.5).slice(0, 10);
+            
+            updateScore();
+            updateProgress();
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = shuffledQuestions[currentQuestionIndex];
+            document.getElementById(currentLevel + '-text').textContent = question.japanese;
+            document.getElementById(currentLevel + '-input').value = '';
+            document.getElementById(currentLevel + '-result').style.display = 'none';
+            answered = false;
+            
+            // 엔터키 이벤트 추가
+            document.getElementById(currentLevel + '-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !answered) {
+                    checkAnswer(currentLevel);
+                }
+            });
+            
+            document.getElementById(currentLevel + '-input').focus();
+        }
+
+        function checkAnswer(level) {
+            if (answered) return;
+            
+            const userAnswer = document.getElementById(level + '-input').value.trim();
+            const correctAnswer = shuffledQuestions[currentQuestionIndex].korean;
+            const resultDiv = document.getElementById(level + '-result');
+            
+            answered = true;
+            
+            if (userAnswer === correctAnswer) {
+                score++;
+                resultDiv.className = 'result correct';
+                resultDiv.innerHTML = `🎉 정답! "${correctAnswer}"`;
+            } else {
+                resultDiv.className = 'result incorrect';
+                resultDiv.innerHTML = `❌ 틀렸습니다. 정답: "${correctAnswer}"<br>입력한 답: "${userAnswer}"`;
+            }
+            
+            resultDiv.style.display = 'block';
+            updateScore();
+        }
+
+        function skipQuestion(level) {
+            const correctAnswer = shuffledQuestions[currentQuestionIndex].korean;
+            const resultDiv = document.getElementById(level + '-result');
+            
+            answered = true;
+            resultDiv.className = 'result incorrect';
+            resultDiv.innerHTML = `⏭️ 건너뛰기. 정답: "${correctAnswer}"`;
+            resultDiv.style.display = 'block';
+        }
+
+        function nextQuestion(level) {
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex >= shuffledQuestions.length) {
+                // 퀴즈 완료
+                const resultDiv = document.getElementById(level + '-result');
+                resultDiv.className = 'result correct';
+                resultDiv.innerHTML = `🎊 퀴즈 완료! 최종 점수: ${score}/10 (${Math.round(score/10*100)}%)`;
+                resultDiv.style.display = 'block';
+                return;
+            }
+            
+            updateProgress();
+            showQuestion();
+        }
+
+        function updateScore() {
+            document.getElementById(currentLevel + '-score').textContent = score;
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestionIndex / shuffledQuestions.length) * 100;
+            document.getElementById(currentLevel + '-progress').style.width = progress + '%';
+        }
+    </script>
+</body>
+</html>
