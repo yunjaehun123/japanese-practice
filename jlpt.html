@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JLPT N5 완벽 대비 학습 사이트</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 25px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            color: white;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 25px;
+            background: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .nav-btn.active {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .study-area {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            min-height: 500px;
+        }
+
+        .question-container {
+            text-align: center;
+        }
+
+        .question {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .japanese-text {
+            font-size: 2.2rem;
+            color: #2196F3;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .option {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .option:hover {
+            border-color: #2196F3;
+            background: #f0f8ff;
+        }
+
+        .option.selected {
+            border-color: #2196F3;
+            background: #2196F3;
+            color: white;
+        }
+
+        .option.correct {
+            border-color: #4CAF50;
+            background: #4CAF50;
+            color: white;
+        }
+
+        .option.incorrect {
+            border-color: #f44336;
+            background: #f44336;
+            color: white;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            transition: width 0.3s ease;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .word-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .word-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 5px solid #2196F3;
+            transition: all 0.3s ease;
+        }
+
+        .word-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .word-japanese {
+            font-size: 1.8rem;
+            color: #2196F3;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .word-reading {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .word-meaning {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .word-frequency {
+            font-size: 0.9rem;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .difficulty-selector {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .difficulty-btn {
+            padding: 8px 20px;
+            margin: 0 5px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .difficulty-btn.active {
+            border-color: #2196F3;
+            background: #2196F3;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .stats {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .navigation {
+                flex-direction: column;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇯🇵 JLPT N5 완벽 대비</h1>
+            <p>체계적인 학습으로 합격을 향해!</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-number" id="totalWords">250+</span>
+                <span>총 어휘수</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="studiedWords">0</span>
+                <span>학습한 단어</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="correctRate">0%</span>
+                <span>정답률</span>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn active" onclick="showSection('quiz')">문제 풀기</button>
+            <button class="nav-btn" onclick="showSection('vocabulary')">단어장</button>
+            <button class="nav-btn" onclick="showSection('grammar')">문법 문제</button>
+            <button class="nav-btn" onclick="showSection('reading')">독해 연습</button>
+        </div>
+
+        <div class="study-area">
+            <!-- 문제 풀기 섹션 -->
+            <div id="quiz-section" class="section">
+                <div class="difficulty-selector">
+                    <button class="difficulty-btn active" onclick="setDifficulty('basic')">기초</button>
+                    <button class="difficulty-btn" onclick="setDifficulty('intermediate')">중급</button>
+                    <button class="difficulty-btn" onclick="setDifficulty('advanced')">고급</button>
+                    <button class="difficulty-btn" onclick="setDifficulty('mixed')">종합</button>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question" id="questionText">문제를 불러오는 중...</div>
+                    <div class="japanese-text" id="japaneseText"></div>
+                    <div class="options" id="optionsContainer"></div>
+                    <div class="controls">
+                        <button class="btn btn-primary" id="submitBtn" onclick="checkAnswer()">정답 확인</button>
+                        <button class="btn btn-success" id="nextBtn" onclick="nextQuestion()" style="display:none">다음 문제</button>
+                        <button class="btn btn-secondary" onclick="skipQuestion()">건너뛰기</button>
+                    </div>
+                    <div id="feedback" class="feedback" style="display:none"></div>
+                </div>
+            </div>
+
+            <!-- 단어장 섹션 -->
+            <div id="vocabulary-section" class="section hidden">
+                <h2 style="margin-bottom: 20px; text-align: center;">JLPT N5 핵심 어휘</h2>
+                <div class="word-list" id="wordList"></div>
+            </div>
+
+            <!-- 문법 문제 섹션 -->
+            <div id="grammar-section" class="section hidden">
+                <div class="question-container">
+                    <div class="question" id="grammarQuestion">문법 문제를 불러오는 중...</div>
+                    <div class="options" id="grammarOptions"></div>
+                    <div class="controls">
+                        <button class="btn btn-primary" id="grammarSubmitBtn" onclick="checkGrammarAnswer()">정답 확인</button>
+                        <button class="btn btn-success" id="grammarNextBtn" onclick="nextGrammarQuestion()" style="display:none">다음 문제</button>
+                    </div>
+                    <div id="grammarFeedback" class="feedback" style="display:none"></div>
+                </div>
+            </div>
+
+            <!-- 독해 연습 섹션 -->
+            <div id="reading-section" class="section hidden">
+                <div class="question-container">
+                    <div class="question" id="readingPassage">독해 문제를 불러오는 중...</div>
+                    <div class="question" id="readingQuestion"></div>
+                    <div class="options" id="readingOptions"></div>
+                    <div class="controls">
+                        <button class="btn btn-primary" id="readingSubmitBtn" onclick="checkReadingAnswer()">정답 확인</button>
+                        <button class="btn btn-success" id="readingNextBtn" onclick="nextReadingQuestion()" style="display:none">다음 문제</button>
+                    </div>
+                    <div id="readingFeedback" class="feedback" style="display:none"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 어휘 데이터베이스
+        const vocabularyData = [
+            // 기초 어휘 (고빈출)
+            { japanese: '会う', reading: 'あう', meaning: '만나다', frequency: 5, level: 'basic' },
+            { japanese: '赤い', reading: 'あかい', meaning: '빨갛다, 붉다', frequency: 4, level: 'basic' },
+            { japanese: '朝', reading: 'あさ', meaning: '아침', frequency: 5, level: 'basic' },
+            { japanese: '後', reading: 'あと', meaning: '뒤, 나중', frequency: 5, level: 'basic' },
+            { japanese: '言う', reading: 'いう', meaning: '말하다', frequency: 5, level: 'basic' },
+            { japanese: '上', reading: 'うえ', meaning: '위', frequency: 5, level: 'basic' },
+            { japanese: '生まれる', reading: 'うまれる', meaning: '태어나다', frequency: 4, level: 'basic' },
+            { japanese: '駅', reading: 'えき', meaning: '역', frequency: 5, level: 'basic' },
+            { japanese: '大きい', reading: 'おおきい', meaning: '크다', frequency: 5, level: 'basic' },
+            { japanese: 'お金', reading: 'おかね', meaning: '돈', frequency: 5, level: 'basic' },
+            { japanese: '外国', reading: 'がいこく', meaning: '외국', frequency: 4, level: 'basic' },
+            { japanese: '買う', reading: 'かう', meaning: '사다', frequency: 5, level: 'basic' },
+            { japanese: '学校', reading: 'がっこう', meaning: '학교', frequency: 5, level: 'basic' },
+            { japanese: '火曜日', reading: 'かようび', meaning: '화요일', frequency: 3, level: 'basic' },
+            { japanese: '聞く', reading: 'きく', meaning: '듣다', frequency: 5, level: 'basic' },
+            { japanese: '銀行', reading: 'ぎんこう', meaning: '은행', frequency: 4, level: 'basic' },
+            { japanese: '金曜日', reading: 'きんようび', meaning: '금요일', frequency: 3, level: 'basic' },
+            { japanese: '国', reading: 'くに', meaning: '나라', frequency: 4, level: 'basic' },
+            { japanese: '車', reading: 'くるま', meaning: '자동차', frequency: 5, level: 'basic' },
+            { japanese: '午後', reading: 'ごご', meaning: '오후', frequency: 4, level: 'basic' },
+            
+            // 중급 어휘
+            { japanese: '今月', reading: 'こんげつ', meaning: '이번 달', frequency: 3, level: 'intermediate' },
+            { japanese: '魚', reading: 'さかな', meaning: '생선, 물고기', frequency: 4, level: 'intermediate' },
+            { japanese: '四月', reading: 'しがつ', meaning: '4월', frequency: 3, level: 'intermediate' },
+            { japanese: '下', reading: 'した', meaning: '아래, 밑', frequency: 4, level: 'intermediate' },
+            { japanese: '七月', reading: 'しちがつ', meaning: '7월', frequency: 3, level: 'intermediate' },
+            { japanese: '七時', reading: 'しちじ', meaning: '7시', frequency: 4, level: 'intermediate' },
+            { japanese: '白い', reading: 'しろい', meaning: '희다, 하얗다', frequency: 4, level: 'intermediate' },
+            { japanese: '千円', reading: 'せんえん', meaning: '1000엔', frequency: 4, level: 'intermediate' },
+            { japanese: '先生', reading: 'せんせい', meaning: '선생님', frequency: 5, level: 'intermediate' },
+            { japanese: '外', reading: 'そと', meaning: '밖', frequency: 3, level: 'intermediate' },
+            { japanese: '空', reading: 'そら', meaning: '하늘', frequency: 3, level: 'intermediate' },
+            { japanese: '大学', reading: 'だいがく', meaning: '대학', frequency: 4, level: 'intermediate' },
+            { japanese: '高い', reading: 'たかい', meaning: '(키가) 크다, (값이) 비싸다, 높다', frequency: 5, level: 'intermediate' },
+            { japanese: '出す', reading: 'だす', meaning: '내다, 제출하다', frequency: 4, level: 'intermediate' },
+            { japanese: '食べる', reading: 'たべる', meaning: '먹다', frequency: 5, level: 'intermediate' },
+            { japanese: '小さい', reading: 'ちいさい', meaning: '(크기가) 작다', frequency: 4, level: 'intermediate' },
+            { japanese: '手', reading: 'て', meaning: '손', frequency: 4, level: 'intermediate' },
+            { japanese: '出る', reading: 'でる', meaning: '나가(오)다', frequency: 4, level: 'intermediate' },
+            { japanese: '電話', reading: 'でんわ', meaning: '전화', frequency: 5, level: 'intermediate' },
+            { japanese: '十日', reading: 'とおか', meaning: '10일', frequency: 3, level: 'intermediate' },
+            
+            // 고급 어휘
+            { japanese: '友だち', reading: 'ともだち', meaning: '친구', frequency: 5, level: 'advanced' },
+            { japanese: '土曜日', reading: 'どようび', meaning: '토요일', frequency: 3, level: 'advanced' },
+            { japanese: '中', reading: 'なか', meaning: '안, 속', frequency: 4, level: 'advanced' },
+            { japanese: '長い', reading: 'ながい', meaning: '길다', frequency: 4, level: 'advanced' },
+            { japanese: '何人', reading: 'なんにん', meaning: '몇 명', frequency: 3, level: 'advanced' },
+            { japanese: '飲む', reading: 'のむ', meaning: '마시다, 삼키다', frequency: 4, level: 'advanced' },
+            { japanese: '入る', reading: 'はいる', meaning: '들어가(오)다', frequency: 4, level: 'advanced' },
+            { japanese: '花', reading: 'はな', meaning: '꽃', frequency: 3, level: 'advanced' },
+            { japanese: '人', reading: 'ひと', meaning: '사람', frequency: 5, level: 'advanced' },
+            { japanese: '古い', reading: 'ふるい', meaning: '오래되다, 낡다', frequency: 3, level: 'advanced' },
+            { japanese: '本', reading: 'ほん', meaning: '책', frequency: 4, level: 'advanced' },
+            { japanese: '毎日', reading: 'まいにち', meaning: '매일', frequency: 4, level: 'advanced' },
+            { japanese: '前', reading: 'まえ', meaning: '앞', frequency: 4, level: 'advanced' },
+            { japanese: '右', reading: 'みぎ', meaning: '오른쪽', frequency: 3, level: 'advanced' },
+            { japanese: '水', reading: 'みず', meaning: '물', frequency: 4, level: 'advanced' },
+            { japanese: '店', reading: 'みせ', meaning: '가게', frequency: 3, level: 'advanced' },
+            { japanese: '見せる', reading: 'みせる', meaning: '보이다, 보여 주다', frequency: 3, level: 'advanced' },
+            { japanese: '道', reading: 'みち', meaning: '길', frequency: 3, level: 'advanced' },
+            { japanese: '見る', reading: 'みる', meaning: '보다', frequency: 5, level: 'advanced' },
+            { japanese: '木曜日', reading: 'もくようび', meaning: '목요일', frequency: 3, level: 'advanced' }
+        ];
+
+        // 문법 문제 데이터
+        const grammarQuestions = [
+            {
+                question: "「先週　デパートに　かいものに　＿＿＿ました。」",
+                options: ["せんしゅ", "せんしゅう", "ぜんしゅ", "ぜんしゅう"],
+                correct: 1,
+                explanation: "「先週」는 「せんしゅう」로 읽습니다."
+            },
+            {
+                question: "「ごはんの　後で　＿＿＿ましょう。」",
+                options: ["つぎ", "うしろ", "まえ", "あと"],
+                correct: 3,
+                explanation: "시간의 순서를 나타낼 때는 「あと」를 사용합니다."
+            },
+            {
+                question: "「もう　いちど　＿＿＿て　ください。」",
+                options: ["いって", "きって", "まって", "たって"],
+                correct: 0,
+                explanation: "「言う」의 て형은 「言って」입니다."
+            }
+        ];
+
+        // 독해 문제 데이터
+        const readingQuestions = [
+            {
+                passage: "わたしは　今日、友だちと　えいがを　見に　行きました。3か月前に　見た　えいがの　DVDが　ほしかったからです。買った　DVDは、友だちや　姉と　いっしょに　見ます。",
+                question: "「わたし」は　今日、何を　しましたか。",
+                options: [
+                    "友だちと　えいがを　見に　行きました。",
+                    "友だちと　DVDを　買いに　行きました。", 
+                    "姉と　えいがを　見に　行きました。",
+                    "姉と　DVDを　買いに　行きました。"
+                ],
+                correct: 0,
+                explanation: "「わたしは　今日、友だちと　えいがを　見に　行きました」라고 되어 있습니다."
+            }
+        ];
+
+        // 현재 문제 상태
+        let currentQuestion = null;
+        let currentQuestionIndex = 0;
+        let currentDifficulty = 'basic';
+        let studiedCount = 0;
+        let correctCount = 0;
+        let totalAttempts = 0;
+
+        // 섹션 전환
+        function showSection(sectionName) {
+            // 모든 섹션 숨기기
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // 네비게이션 버튼 상태 업데이트
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // 선택된 섹션 표시
+            document.getElementById(sectionName + '-section').classList.remove('hidden');
+            event.target.classList.add('active');
+
+            // 각 섹션별 초기화
+            if (sectionName === 'vocabulary') {
+                displayVocabulary();
+            } else if (sectionName === 'grammar') {
+                loadGrammarQuestion();
+            } else if (sectionName === 'reading') {
+                loadReadingQuestion();
+            } else if (sectionName === 'quiz') {
+                generateQuestion();
+            }
+        }
+
+        // 난이도 설정
+        function setDifficulty(level) {
+            currentDifficulty = level;
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            generateQuestion();
+        }
+
+        // 문제 생성
+        function generateQuestion() {
+            let availableWords = vocabularyData;
+            
+            if (currentDifficulty !== 'mixed') {
+                availableWords = vocabularyData.filter(word => word.level === currentDifficulty);
+            }
+
+            if (availableWords.length === 0) {
+                availableWords = vocabularyData;
+            }
+
+            const randomWord = availableWords[Math.floor(Math.random() * availableWords.length)];
+            const questionTypes = ['reading', 'meaning', 'kanji'];
+            const questionType = questionTypes[Math.floor(Math.random() * questionTypes.length)];
+
+            generateQuestionByType(randomWord, questionType);
+        }
+
+        function generateQuestionByType(word, type) {
+            const questionContainer = document.getElementById('questionText');
+            const japaneseContainer = document.getElementById('japaneseText');
+            const optionsContainer = document.getElementById('optionsContainer');
+            
+            let question, correctAnswer, options;
+
+            switch (type) {
+                case 'reading':
+                    question = "다음 한자의 읽기는?";
+                    japaneseContainer.textContent = word.japanese;
+                    correctAnswer = word.reading;
+                    options = generateReadingOptions(word);
+                    break;
+                case 'meaning':
+                    question = "다음 단어의 뜻은?";
+                    japaneseContainer.textContent = word.japanese + " (" + word.reading + ")";
+                    correctAnswer = word.meaning;
+                    options = generateMeaningOptions(word);
+                    break;
+                case 'kanji':
+                    question = "다음 읽기에 해당하는 한자는?";
+                    japaneseContainer.textContent = word.reading;
+                    correctAnswer = word.japanese;
+                    options = generateKanjiOptions(word);
+                    break;
+            }
+
+            questionContainer.textContent = question;
+            displayOptions(options, correctAnswer);
+            currentQuestion = { word, type, correctAnswer };
+        }
+
+        function generateReadingOptions(correctWord) {
+            const options = [correctWord.reading];
+            const similarWords = vocabularyData.filter(w => 
+                w.japanese !== correctWord.japanese && 
+                w.reading.length === correctWord.reading.length
+            );
+            
+            while (options.length < 4 && similarWords.length > 0) {
+                const randomWord = similarWords[Math.floor(Math.random() * similarWords.length)];
+                if (!options.includes(randomWord.reading)) {
+                    options.push(randomWord.reading);
+                }
+                similarWords.splice(similarWords.indexOf(randomWord), 1);
+            }
+
+            // 부족한 선택지 채우기
+            const commonReadings = ['あい', 'えん', 'がく', 'せい', 'とう', 'にち', 'ほん'];
+            while (options.length < 4) {
+                const randomReading = commonReadings[Math.floor(Math.random() * commonReadings.length)];
+                if (!options.includes(randomReading)) {
+                    options.push(randomReading);
+                }
+            }
+
+            return shuffleArray(options);
+        }
+
+        function generateMeaningOptions(correctWord) {
+            const options = [correctWord.meaning];
+            const otherWords = vocabularyData.filter(w => w.japanese !== correctWord.japanese);
+            
+            while (options.length < 4 && otherWords.length > 0) {
+                const randomWord = otherWords[Math.floor(Math.random() * otherWords.length)];
+                if (!options.includes(randomWord.meaning)) {
+                    options.push(randomWord.meaning);
+                }
+                otherWords.splice(otherWords.indexOf(randomWord), 1);
+            }
+
+            return shuffleArray(options);
+        }
+
+        function generateKanjiOptions(correctWord) {
+            const options = [correctWord.japanese];
+            const similarWords = vocabularyData.filter(w => 
+                w.reading !== correctWord.reading && 
+                w.japanese.length === correctWord.japanese.length
+            );
+            
+            while (options.length < 4 && similarWords.length > 0) {
+                const randomWord = similarWords[Math.floor(Math.random() * similarWords.length)];
+                if (!options.includes(randomWord.japanese)) {
+                    options.push(randomWord.japanese);
+                }
+                similarWords.splice(similarWords.indexOf(randomWord), 1);
+            }
+
+            // 부족한 선택지 채우기
+            const commonKanji = ['時間', '学生', '会社', '電車', '今日'];
+            while (options.length < 4) {
+                const randomKanji = commonKanji[Math.floor(Math.random() * commonKanji.length)];
+                if (!options.includes(randomKanji)) {
+                    options.push(randomKanji);
+                }
+            }
+
+            return shuffleArray(options);
+        }
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function displayOptions(options, correctAnswer) {
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option;
+                optionElement.onclick = () => selectOption(optionElement, option);
+                container.appendChild(optionElement);
+            });
+        }
+
+        function selectOption(element, value) {
+            // 이전 선택 해제
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // 새로운 선택
+            element.classList.add('selected');
+            currentQuestion.selectedAnswer = value;
+        }
+
+        function checkAnswer() {
+            if (!currentQuestion.selectedAnswer) {
+                alert('답을 선택해주세요!');
+                return;
+            }
+
+            totalAttempts++;
+            const isCorrect = currentQuestion.selectedAnswer === currentQuestion.correctAnswer;
+            
+            if (isCorrect) {
+                correctCount++;
+            }
+
+            // 시각적 피드백
+            document.querySelectorAll('.option').forEach(opt => {
+                if (opt.textContent === currentQuestion.correctAnswer) {
+                    opt.classList.add('correct');
+                } else if (opt.classList.contains('selected') && !isCorrect) {
+                    opt.classList.add('incorrect');
+                }
+            });
+
+            // 피드백 표시
+            const feedbackElement = document.getElementById('feedback');
+            feedbackElement.style.display = 'block';
+            feedbackElement.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+            
+            let feedbackText = isCorrect ? '정답입니다! 🎉' : '틀렸습니다. 😅';
+            feedbackText += `<br><strong>정답:</strong> ${currentQuestion.correctAnswer}`;
+            
+            if (currentQuestion.word.meaning) {
+                feedbackText += `<br><strong>의미:</strong> ${currentQuestion.word.meaning}`;
+            }
+            
+            feedbackElement.innerHTML = feedbackText;
+
+            // 버튼 상태 변경
+            document.getElementById('submitBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'inline-block';
+
+            updateStats();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            studiedCount++;
+            
+            // UI 리셋
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('submitBtn').style.display = 'inline-block';
+            document.getElementById('nextBtn').style.display = 'none';
+            
+            // 진행률 업데이트
+            const progress = (currentQuestionIndex % 10) * 10;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            generateQuestion();
+        }
+
+        function skipQuestion() {
+            nextQuestion();
+        }
+
+        function updateStats() {
+            document.getElementById('studiedWords').textContent = studiedCount;
+            const rate = totalAttempts > 0 ? Math.round((correctCount / totalAttempts) * 100) : 0;
+            document.getElementById('correctRate').textContent = rate + '%';
+        }
+
+        // 단어장 표시
+        function displayVocabulary() {
+            const container = document.getElementById('wordList');
+            container.innerHTML = '';
+
+            vocabularyData.forEach(word => {
+                const wordCard = document.createElement('div');
+                wordCard.className = 'word-card fade-in';
+                
+                wordCard.innerHTML = `
+                    <div class="word-japanese">${word.japanese}</div>
+                    <div class="word-reading">${word.reading}</div>
+                    <div class="word-meaning">${word.meaning}</div>
+                    <div class="word-frequency">출제 빈도: ${'★'.repeat(word.frequency)}</div>
+                `;
+                
+                container.appendChild(wordCard);
+            });
+        }
+
+        // 문법 문제 로드
+        function loadGrammarQuestion() {
+            const randomIndex = Math.floor(Math.random() * grammarQuestions.length);
+            const question = grammarQuestions[randomIndex];
+            
+            document.getElementById('grammarQuestion').innerHTML = question.question;
+            
+            const container = document.getElementById('grammarOptions');
+            container.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = `${index + 1}. ${option}`;
+                optionElement.onclick = () => selectGrammarOption(optionElement, index);
+                container.appendChild(optionElement);
+            });
+            
+            currentQuestion = { 
+                ...question, 
+                selectedAnswer: null,
+                type: 'grammar'
+            };
+        }
+
+        function selectGrammarOption(element, index) {
+            document.querySelectorAll('#grammarOptions .option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            currentQuestion.selectedAnswer = index;
+        }
+
+        function checkGrammarAnswer() {
+            if (currentQuestion.selectedAnswer === null) {
+                alert('답을 선택해주세요!');
+                return;
+            }
+
+            totalAttempts++;
+            const isCorrect = currentQuestion.selectedAnswer === currentQuestion.correct;
+            
+            if (isCorrect) correctCount++;
+
+            // 시각적 피드백
+            const options = document.querySelectorAll('#grammarOptions .option');
+            options.forEach((opt, index) => {
+                if (index === currentQuestion.correct) {
+                    opt.classList.add('correct');
+                } else if (index === currentQuestion.selectedAnswer && !isCorrect) {
+                    opt.classList.add('incorrect');
+                }
+            });
+
+            // 피드백 표시
+            const feedbackElement = document.getElementById('grammarFeedback');
+            feedbackElement.style.display = 'block';
+            feedbackElement.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+            feedbackElement.innerHTML = (isCorrect ? '정답입니다! 🎉' : '틀렸습니다. 😅') + 
+                `<br><strong>해설:</strong> ${currentQuestion.explanation}`;
+
+            // 버튼 상태 변경
+            document.getElementById('grammarSubmitBtn').style.display = 'none';
+            document.getElementById('grammarNextBtn').style.display = 'inline-block';
+
+            updateStats();
+        }
+
+        function nextGrammarQuestion() {
+            studiedCount++;
+            
+            // UI 리셋
+            document.getElementById('grammarFeedback').style.display = 'none';
+            document.getElementById('grammarSubmitBtn').style.display = 'inline-block';
+            document.getElementById('grammarNextBtn').style.display = 'none';
+            
+            loadGrammarQuestion();
+        }
+
+        // 독해 문제 로드
+        function loadReadingQuestion() {
+            const randomIndex = Math.floor(Math.random() * readingQuestions.length);
+            const question = readingQuestions[randomIndex];
+            
+            document.getElementById('readingPassage').innerHTML = `<div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px; line-height: 1.8; font-size: 1.2rem;">${question.passage}</div>`;
+            document.getElementById('readingQuestion').innerHTML = question.question;
+            
+            const container = document.getElementById('readingOptions');
+            container.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = `${index + 1}. ${option}`;
+                optionElement.onclick = () => selectReadingOption(optionElement, index);
+                container.appendChild(optionElement);
+            });
+            
+            currentQuestion = { 
+                ...question, 
+                selectedAnswer: null,
+                type: 'reading'
+            };
+        }
+
+        function selectReadingOption(element, index) {
+            document.querySelectorAll('#readingOptions .option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            currentQuestion.selectedAnswer = index;
+        }
+
+        function checkReadingAnswer() {
+            if (currentQuestion.selectedAnswer === null) {
+                alert('답을 선택해주세요!');
+                return;
+            }
+
+            totalAttempts++;
+            const isCorrect = currentQuestion.selectedAnswer === currentQuestion.correct;
+            
+            if (isCorrect) correctCount++;
+
+            // 시각적 피드백
+            const options = document.querySelectorAll('#readingOptions .option');
+            options.forEach((opt, index) => {
+                if (index === currentQuestion.correct) {
+                    opt.classList.add('correct');
+                } else if (index === currentQuestion.selectedAnswer && !isCorrect) {
+                    opt.classList.add('incorrect');
+                }
+            });
+
+            // 피드백 표시
+            const feedbackElement = document.getElementById('readingFeedback');
+            feedbackElement.style.display = 'block';
+            feedbackElement.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+            feedbackElement.innerHTML = (isCorrect ? '정답입니다! 🎉' : '틀렸습니다. 😅') + 
+                `<br><strong>해설:</strong> ${currentQuestion.explanation}`;
+
+            // 버튼 상태 변경
+            document.getElementById('readingSubmitBtn').style.display = 'none';
+            document.getElementById('readingNextBtn').style.display = 'inline-block';
+
+            updateStats();
+        }
+
+        function nextReadingQuestion() {
+            studiedCount++;
+            
+            // UI 리셋
+            document.getElementById('readingFeedback').style.display = 'none';
+            document.getElementById('readingSubmitBtn').style.display = 'inline-block';
+            document.getElementById('readingNextBtn').style.display = 'none';
+            
+            loadReadingQuestion();
+        }
+
+        // 초기화
+        window.onload = function() {
+            generateQuestion();
+        };
+
+        // 키보드 단축키
+        document.addEventListener('keydown', function(event) {
+            if (event.key >= '1' && event.key <= '4') {
+                const optionIndex = parseInt(event.key) - 1;
+                const options = document.querySelectorAll('.option');
+                if (options[optionIndex]) {
+                    options[optionIndex].click();
+                }
+            } else if (event.key === 'Enter') {
+                const submitBtn = document.querySelector('.btn-primary[style*="inline-block"], .btn-primary:not([style*="none"])');
+                const nextBtn = document.querySelector('.btn-success[style*="inline-block"]');
+                
+                if (nextBtn && nextBtn.style.display !== 'none') {
+                    nextBtn.click();
+                } else if (submitBtn && submitBtn.style.display !== 'none') {
+                    submitBtn.click();
+                }
+            } else if (event.key === ' ') {
+                event.preventDefault();
+                skipQuestion();
+            }
+        });
+
+        // 추가 어휘 데이터 (더 많은 단어들)
+        const additionalVocabulary = [
+            { japanese: 'あした', reading: 'あした', meaning: '내일', frequency: 4, level: 'basic' },
+            { japanese: 'あそぶ', reading: 'あそぶ', meaning: '놀다', frequency: 3, level: 'basic' },
+            { japanese: 'あたたかい', reading: 'あたたかい', meaning: '따뜻하다', frequency: 3, level: 'basic' },
+            { japanese: 'あまい', reading: 'あまい', meaning: '달다', frequency: 3, level: 'basic' },
+            { japanese: 'あらう', reading: 'あらう', meaning: '씻다', frequency: 3, level: 'basic' },
+            { japanese: 'あるく', reading: 'あるく', meaning: '걷다', frequency: 4, level: 'intermediate' },
+            { japanese: 'いくら', reading: 'いくら', meaning: '얼마(값)', frequency: 4, level: 'intermediate' },
+            { japanese: 'いそがしい', reading: 'いそがしい', meaning: '바쁘다', frequency: 4, level: 'intermediate' },
+            { japanese: 'いぬ', reading: 'いぬ', meaning: '개', frequency: 3, level: 'intermediate' },
+            { japanese: 'おいしい', reading: 'おいしい', meaning: '맛있다', frequency: 5, level: 'intermediate' },
+            { japanese: 'おきる', reading: 'おきる', meaning: '일어나다', frequency: 4, level: 'intermediate' },
+            { japanese: 'おもしろい', reading: 'おもしろい', meaning: '재미있다', frequency: 4, level: 'advanced' },
+            { japanese: 'カメラ', reading: 'カメラ', meaning: '카메라', frequency: 3, level: 'advanced' },
+            { japanese: 'タクシー', reading: 'タクシー', meaning: '택시', frequency: 4, level: 'advanced' },
+            { japanese: 'レストラン', reading: 'レストラン', meaning: '레스토랑', frequency: 3, level: 'advanced' }
+        ];
+
+        // 어휘 데이터에 추가
+        vocabularyData.push(...additionalVocabulary);
+
+        // 로컬 스토리지 활용 (진행 상황 저장)
+        function saveProgress() {
+            const progress = {
+                studiedCount,
+                correctCount,
+                totalAttempts,
+                lastStudyDate: new Date().toDateString()
+            };
+            localStorage.setItem('jlptProgress', JSON.stringify(progress));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('jlptProgress');
+            if (saved) {
+                const progress = JSON.parse(saved);
+                studiedCount = progress.studiedCount || 0;
+                correctCount = progress.correctCount || 0;
+                totalAttempts = progress.totalAttempts || 0;
+                updateStats();
+            }
+        }
+
+        // 페이지 로드 시 진행상황 불러오기
+        loadProgress();
+
+        // 페이지 종료 시 진행상황 저장
+        window.addEventListener('beforeunload', saveProgress);
+    </script>
+</body>
+</html>
